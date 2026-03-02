@@ -350,14 +350,14 @@ function renderCard(data, index, parent) {
 }
 
 // ========== Readonly Card ==========
-function renderReadonlyCard(card, { name, relationship, keywords = [], links = [], availability = null }, index) {
+function renderReadonlyCard(card, data, index) {
   clear(card);
 
   const header = document.createElement("div");
   header.className = "card-header";
 
   const title = document.createElement("h4");
-  title.textContent = name;
+  title.textContent = data.name;
   title.style.cursor = "pointer";
 
   const actions = document.createElement("div");
@@ -365,7 +365,7 @@ function renderReadonlyCard(card, { name, relationship, keywords = [], links = [
 
   const editBtn = button("Edit", () => renderInlineEditor(card, data, data.id), "btn-sm");
   const delBtn = button("Delete", async () => {
-    if (confirm(`Delete ${name}?`)) {
+    if (confirm(`Delete ${data.name}?`)) {
       await deleteContact(data.id);
       renderAllContacts();
     }
