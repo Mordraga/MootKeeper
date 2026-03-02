@@ -353,11 +353,17 @@ function renderCard(data, index, parent) {
 function renderReadonlyCard(card, data, index) {
   clear(card);
 
+  const relationship = data.relationship;
+  const links = data.links || [];
+  const keywords = data.keywords || [];
+  const availability = data.availability;
+  const name = data.name;
+
   const header = document.createElement("div");
   header.className = "card-header";
 
   const title = document.createElement("h4");
-  title.textContent = data.name;
+  title.textContent = name;
   title.style.cursor = "pointer";
 
   const actions = document.createElement("div");
@@ -365,7 +371,7 @@ function renderReadonlyCard(card, data, index) {
 
   const editBtn = button("Edit", () => renderInlineEditor(card, data, data.id), "btn-sm");
   const delBtn = button("Delete", async () => {
-    if (confirm(`Delete ${data.name}?`)) {
+    if (confirm(`Delete ${name}?`)) {
       await deleteContact(data.id);
       renderAllContacts();
     }
