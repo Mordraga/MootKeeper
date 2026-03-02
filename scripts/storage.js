@@ -30,9 +30,11 @@ const DEFAULT_CATEGORIES = {
   relationships: ["Friend", "Artist", "Viewer", "Mod", "Moot", "Oshi", "Senpai", "Kohai", "Other"],
   tags: {
     Interests: ["Gaming", "IRL", "Art", "Music", "Tech"],
-    Misc: ["Active", "Inactive", "Priority"],
+    Misc: ["Collab-Open", "Collab-Selective", "Lurker-Friendly", "Interactive", "Chill", "Chaotic", "Cozy", "Feral", "Unhinged", "NSFW", "NSFW-Lite", "Consistent", "Sporadic"],
     Personality: ["Seiso", "Ojou", "Genki", "Kuudere", "Tsundere"],
-    Language: ["EN", "JP", "GRM"]
+    Language: ["EN", "JP", "DE", "FR", "RU"],
+    Size: ["Micro", "Small", "Mid", "Large", "Partnered"],
+    Affiliations: ["Hololive", "Nijisanji", "VShojo", "Independent"]
   }
 };
 
@@ -110,7 +112,7 @@ export async function loadContacts() {
 export async function addContact(data) {
   if (!isLoggedIn()) {
     const contacts = loadLocalContacts();
-    const contact = { ...data, id: genLocalId() };
+    const contact = { ...data, id: genLocalId(), updatedAt: new Date().toISOString() };
     contacts.push(contact);
     saveLocalContacts(contacts);
     return contact;
@@ -133,7 +135,7 @@ export async function updateContact(id, updated) {
     const contacts = loadLocalContacts();
     const idx = contacts.findIndex(c => c.id === id);
     if (idx !== -1) {
-      contacts[idx] = { ...contacts[idx], ...updated };
+      contacts[idx] = { ...contacts[idx], ...updated, updatedAt: new Date().toISOString() };
       saveLocalContacts(contacts);
       return contacts[idx];
     }

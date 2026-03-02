@@ -74,7 +74,16 @@ h3 {
   padding: 1rem;
 }
 
-footer {
+.relationship-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.75rem;
+}
+
+.credit-footer {
   text-align: center;
   padding: 1rem;
   font-size: 0.8rem;
@@ -227,16 +236,14 @@ select:focus {
 }
 
 /* ========== LINKS ========== */
-.links-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
 
 .links-block {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.75rem;
 }
 
 .link-pair {
@@ -244,6 +251,7 @@ select:focus {
   grid-template-columns: 1fr 1fr auto;
   gap: 0.4rem;
   align-items: center;
+  margin: 0.25rem 0;
 }
 
 .link-pair input {
@@ -262,6 +270,13 @@ select:focus {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+}
+
+.selected-keywords{
+  padding: 0.4rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
 }
 
 .selected-keywords,
@@ -448,6 +463,14 @@ button:hover {
 
 .card-body.collapsed {
   display: none;
+}
+
+.card-footer {
+  padding: 0.3rem 0.75rem;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+  text-align: right;
 }
 
 .relationship-badge {

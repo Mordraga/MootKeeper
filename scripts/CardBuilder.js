@@ -482,6 +482,13 @@ function renderReadonlyCard(card, data, index) {
   if (availDisplay) body.appendChild(availDisplay);
 
   card.append(header, body);
+
+  if (data.updatedAt) {
+    const footer = document.createElement("div");
+    footer.className = "card-footer";
+    footer.textContent = `Updated ${new Date(data.updatedAt).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}`;
+    card.appendChild(footer);
+  }
 }
 
 // ========== Inline Editor ==========
