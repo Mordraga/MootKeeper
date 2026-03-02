@@ -10,7 +10,7 @@ import {
   loginWithTwitch,
   logout,
   handleCallback,
-  loadUsername
+  loadUserInfo
 } from "./storage.js";
 
 import {
@@ -589,5 +589,5 @@ if (!isLoggedIn()) {
   ensureOneLinkPair();
   rebuildFormDropdowns();
   renderAllContacts();
-  loadUsername();
+  loadUserInfo();
 }
