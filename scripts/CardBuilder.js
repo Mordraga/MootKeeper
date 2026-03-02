@@ -354,7 +354,7 @@ function renderReadonlyCard(card, data, index) {
   clear(card);
 
   const relationship = data.relationship;
-  const links = data.links || [];
+  const links = Array.isArray(data.links) ? data.links : [];
   const keywords = data.keywords || [];
   const availability = data.availability;
   const name = data.name;
