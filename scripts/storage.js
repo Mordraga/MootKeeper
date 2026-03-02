@@ -31,7 +31,7 @@ const DEFAULT_CATEGORIES = {
   tags: {
     Interests: ["Gaming", "IRL", "Art", "Music", "Tech"],
     Misc: ["Collab-Open", "Collab-Selective", "Lurker-Friendly", "Interactive", "Chill", "Chaotic", "Cozy", "Feral", "Unhinged", "NSFW", "NSFW-Lite", "Consistent", "Sporadic"],
-    Personality: ["Seiso", "Ojou", "Genki", "Kuudere", "Tsundere"],
+    Personality: ["Seiso", "Ojou", "Genki", "Kuudere", "Tsundere", "Kamidere", "Yandere", "Dandere", "Deredere"],
     Language: ["EN", "JP", "DE", "FR", "RU"],
     Size: ["Micro", "Small", "Mid", "Large", "Partnered"],
     Affiliations: ["Hololive", "Nijisanji", "VShojo", "Independent"]
