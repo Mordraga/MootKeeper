@@ -166,3 +166,25 @@ export function removeTag(name) {
   cats.tags = cats.tags.filter(t => t !== name);
   saveCategories(cats);
 }
+
+async function loadUserInfo() {
+  const res = await fetch(`${API_BASE}/auth/validate`, {
+    headers: authHeaders()
+  });
+  const data = await res.json();
+  
+  const img = document.createElement("img");
+  img.src = data.profile_image_url;
+  img.alt = data.display_name;
+  img.style.width = "32px";
+  img.style.height = "32px";
+  img.style.borderRadius = "50%";
+  
+  const p = document.createElement("p");
+  p.textContent = `@${data.display_name}`;
+  p.style.margin = "0";
+  
+  const logoutBtn = document.getElementById("logout-btn");
+  logoutBtn.before(p);
+  logoutBtn.before(img);
+}
