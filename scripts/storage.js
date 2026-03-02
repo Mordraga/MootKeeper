@@ -184,7 +184,9 @@ export async function loadUserInfo() {
   p.textContent = `@${data.display_name}`;
   p.style.margin = "0";
   
-  const logoutBtn = document.getElementById("logout-btn");
-  logoutBtn.before(img);
-  logoutBtn.before(p);
+  const wrapper = document.createElement("div");
+  wrapper.style.cssText = "display:flex; align-items:center; gap:4px;";
+  wrapper.appendChild(img);
+  wrapper.appendChild(p);
+  document.getElementById("logout-btn").before(wrapper);
 }
