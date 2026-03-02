@@ -213,13 +213,28 @@ function buildKeywordSelector(current = []) {
 
   function refreshAvailable() {
     clear(available);
+
     Object.entries(cats.tags).forEach(([group, groupTags]) => {
-      const visible = Array.isArray(groupTags) ? groupTags.filter(t => !selectedKeywords.includes(t)) : [];
+      const visible = Array.isArray(groupTags)
+        ? groupTags.filter(t => !selectedKeywords.includes(t))
+        : [];
+
       if (!visible.length) return;
+
+      const groupSection = document.createElement("div");
+      groupSection.className = "tag-group";
+
       const groupLabel = document.createElement("span");
       groupLabel.className = "tag-group-label";
       groupLabel.textContent = group;
-      available.appendChild(groupLabel);
+
+      const groupContent = document.createElement("div");
+      groupContent.className = "tag-group-content";
+
+      groupLabel.addEventListener("click", () => {
+        groupSection.classList.toggle("collapsed");
+      });
+
       visible.forEach(t => {
         const span = document.createElement("span");
         span.className = "tag tag-available";
@@ -231,8 +246,11 @@ function buildKeywordSelector(current = []) {
             refreshAvailable();
           }
         });
-        available.appendChild(span);
+        groupContent.appendChild(span);
       });
+
+      groupSection.append(groupLabel, groupContent);
+      available.appendChild(groupSection);
     });
   }
 
