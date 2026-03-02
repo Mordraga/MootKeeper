@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>MootsKeeper - Logging in...</title>
+</head>
+<body>
+  <script>
+    // Grab the full query string from Twitch callback
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
+    
+    if (code) {
+      // Send code to backend to exchange for token
+      fetch(`https://streamernetworkfastapi-production.up.railway.app/auth/callback?code=${code}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.access_token) {
+            localStorage.setItem("twitch_token", data.access_token);
+          }
+          window.location.href = "/";
+        })
+        .catch(() => {
+          window.location.href = "/";
+        });
+    } else {
+      window.location.href = "/";
+    }
+  </script>
+  <p>Logging you in...</p>
+</body>
+</html>
