@@ -3,6 +3,28 @@
 const API_BASE = "https://streamernetworkfastapi-production.up.railway.app";
 const CATEGORIES_KEY = "streamCategories";
 const TOKEN_KEY = "twitch_token";
+const LOCAL_CONTACTS_KEY = "local_contacts";
+
+// =============================
+// LOCAL CONTACTS (localStorage)
+// =============================
+
+function genLocalId() {
+  return `local_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+}
+
+function loadLocalContacts() {
+  try {
+    const raw = localStorage.getItem(LOCAL_CONTACTS_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveLocalContacts(contacts) {
+  localStorage.setItem(LOCAL_CONTACTS_KEY, JSON.stringify(contacts));
+}
 
 const DEFAULT_CATEGORIES = {
   relationships: ["Collab", "Artist", "Friend", "Mod", "Viewer", "Other"],
@@ -63,6 +85,7 @@ export function handleCallback() {
 // =============================
 
 export async function loadContacts() {
+  if (!isLoggedIn()) return loadLocalContacts();
   try {
     const res = await fetch(`${API_BASE}/contacts`, {
       headers: authHeaders()
@@ -80,6 +103,13 @@ export async function loadContacts() {
 }
 
 export async function addContact(data) {
+  if (!isLoggedIn()) {
+    const contacts = loadLocalContacts();
+    const contact = { ...data, id: genLocalId() };
+    contacts.push(contact);
+    saveLocalContacts(contacts);
+    return contact;
+  }
   try {
     const res = await fetch(`${API_BASE}/contacts`, {
       method: "POST",
@@ -94,6 +124,16 @@ export async function addContact(data) {
 }
 
 export async function updateContact(id, updated) {
+  if (!isLoggedIn()) {
+    const contacts = loadLocalContacts();
+    const idx = contacts.findIndex(c => c.id === id);
+    if (idx !== -1) {
+      contacts[idx] = { ...contacts[idx], ...updated };
+      saveLocalContacts(contacts);
+      return contacts[idx];
+    }
+    return null;
+  }
   try {
     const res = await fetch(`${API_BASE}/contacts/${id}`, {
       method: "PUT",
@@ -108,6 +148,10 @@ export async function updateContact(id, updated) {
 }
 
 export async function deleteContact(id) {
+  if (!isLoggedIn()) {
+    saveLocalContacts(loadLocalContacts().filter(c => c.id !== id));
+    return { ok: true };
+  }
   try {
     const res = await fetch(`${API_BASE}/contacts/${id}`, {
       method: "DELETE",
@@ -171,22 +215,6 @@ export async function loadUserInfo() {
   const res = await fetch(`${API_BASE}/auth/validate`, {
     headers: authHeaders()
   });
-  const data = await res.json();
-  
-  const img = document.createElement("img");
-  img.src = data.profile_image_url;
-  img.alt = data.display_name;
-  img.style.width = "32px";
-  img.style.height = "32px";
-  img.style.borderRadius = "50%";
-  
-  const p = document.createElement("p");
-  p.textContent = `@${data.display_name}`;
-  p.style.margin = "0";
-  
-  const wrapper = document.createElement("div");
-  wrapper.style.cssText = "display:flex; align-items:center; gap:4px;";
-  wrapper.appendChild(img);
-  wrapper.appendChild(p);
-  document.getElementById("logout-btn").before(wrapper);
+  if (!res.ok) throw new Error("Failed to validate");
+  return await res.json();
 }

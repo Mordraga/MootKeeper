@@ -13,6 +13,7 @@ import {
   loadUserInfo
 } from "./storage.js";
 
+
 import {
   qs,
   clear,
@@ -49,9 +50,50 @@ let currentAvailability = null;
 // Filter state
 let activeFilter = { search: "", relationship: "" };
 
+// ========== Auth Card ==========
+function buildAuthCard() {
+  const card = document.createElement("div");
+  card.className = "auth-card";
+
+  if (isLoggedIn()) {
+    const loading = document.createElement("p");
+    loading.className = "auth-name";
+    loading.textContent = "Loading...";
+    card.appendChild(loading);
+
+    loadUserInfo().then(data => {
+      clear(card);
+
+      const img = document.createElement("img");
+      img.src = data.profile_image_url;
+      img.alt = data.display_name;
+      img.className = "auth-pfp";
+
+      const name = document.createElement("p");
+      name.className = "auth-name";
+      name.textContent = `@${data.display_name}`;
+
+      const logoutBtn = button("Logout", logout, "btn-sm");
+
+      card.append(img, name, logoutBtn);
+    }).catch(() => logout());
+  } else {
+    const prompt = document.createElement("p");
+    prompt.className = "auth-prompt";
+    prompt.textContent = "Login to sync contacts across devices";
+
+    const loginBtn = button("Login with Twitch", loginWithTwitch, "btn-primary");
+    loginBtn.style.width = "100%";
+
+    card.append(prompt, loginBtn);
+  }
+
+  return card;
+}
+
 // ========== Init Side Panel ==========
 function initSidePanel() {
-  const panel = createSidePanel([
+  const { panel, inner } = createSidePanel([
     {
       label: "Categories",
       icon: "🗂",
@@ -67,6 +109,7 @@ function initSidePanel() {
       onClick: () => openTimezoneModal()
     }
   ]);
+  inner.appendChild(buildAuthCard());
   document.body.insertBefore(panel, document.body.firstChild);
 }
 
@@ -578,22 +621,10 @@ addLinkBtn.addEventListener("click", () => {
   linksContainer.appendChild(createLinkPair());
 });
 
-// ========== Auth Init ==========
+// ========== Init ==========
 handleCallback();
-
-const loginScreen = document.getElementById("login-screen");
-const appScreen = document.getElementById("app-screen");
-
-if (!isLoggedIn()) {
-  loginScreen.style.display = "";
-  document.getElementById("login-btn").addEventListener("click", loginWithTwitch);
-} else {
-  appScreen.style.display = "";
-  document.getElementById("logout-btn").addEventListener("click", logout);
-  initSidePanel();
-  initFilterBar();
-  ensureOneLinkPair();
-  rebuildFormDropdowns();
-  renderAllContacts();
-  loadUserInfo();
-}
+initSidePanel();
+initFilterBar();
+ensureOneLinkPair();
+rebuildFormDropdowns();
+renderAllContacts();

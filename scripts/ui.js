@@ -134,7 +134,7 @@ export function createSidePanel(tools = []) {
   });
 
   panel.append(toggle, inner);
-  return panel;
+  return { panel, inner };
 }
 
 // Filter/sort bar
