@@ -342,6 +342,7 @@ select:focus {
   border-radius: 99px;
   font-size: 0.8rem;
   color: var(--text);
+  flex: 0 0 auto;
 }
 
 .tag-available {
