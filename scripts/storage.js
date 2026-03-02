@@ -27,8 +27,13 @@ function saveLocalContacts(contacts) {
 }
 
 const DEFAULT_CATEGORIES = {
-  relationships: ["Collab", "Artist", "Friend", "Mod", "Viewer", "Other"],
-  tags: ["chaotic", "feral", "cozy", "horror", "wholesome", "nsfw"]
+  relationships: ["Friend", "Artist", "Viewer", "Mod", "Moot", "Oshi", "Senpai", "Kohai", "Other"],
+  tags: {
+    Interests: ["Gaming", "IRL", "Art", "Music", "Tech"],
+    Misc: ["Active", "Inactive", "Priority"],
+    Personality: ["Seiso", "Ojou", "Genki", "Kuudere", "Tsundere"],
+    Language: ["EN", "JP", "GRM"]
+  }
 };
 
 // =============================
@@ -171,7 +176,21 @@ export async function deleteContact(id) {
 export function loadCategories() {
   try {
     const saved = localStorage.getItem(CATEGORIES_KEY);
-    return saved ? JSON.parse(saved) : { ...DEFAULT_CATEGORIES };
+    const data = saved ? JSON.parse(saved) : { ...DEFAULT_CATEGORIES };
+
+    // Normalize: flat-array tags (old format) → grouped under "Other"
+    if (Array.isArray(data.tags)) {
+      data.tags = { Other: data.tags };
+    } else if (!data.tags || typeof data.tags !== "object") {
+      data.tags = { ...DEFAULT_CATEGORIES.tags };
+    }
+
+    // Ensure relationships is an array
+    if (!Array.isArray(data.relationships)) {
+      data.relationships = [...DEFAULT_CATEGORIES.relationships];
+    }
+
+    return data;
   } catch {
     return { ...DEFAULT_CATEGORIES };
   }
@@ -196,18 +215,24 @@ export function removeRelationship(name) {
   saveCategories(cats);
 }
 
-export function addTag(name) {
+export function addTag(name, group) {
   const cats = loadCategories();
   const trimmed = name.trim();
-  if (!trimmed || cats.tags.includes(trimmed)) return false;
-  cats.tags.push(trimmed);
+  const allTags = Object.values(cats.tags).flat();
+  if (!trimmed || allTags.includes(trimmed)) return false;
+  if (!cats.tags[group]) cats.tags[group] = [];
+  cats.tags[group].push(trimmed);
   saveCategories(cats);
   return true;
 }
 
 export function removeTag(name) {
   const cats = loadCategories();
-  cats.tags = cats.tags.filter(t => t !== name);
+  for (const group of Object.keys(cats.tags)) {
+    if (Array.isArray(cats.tags[group])) {
+      cats.tags[group] = cats.tags[group].filter(t => t !== name);
+    }
+  }
   saveCategories(cats);
 }
 

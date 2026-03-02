@@ -212,9 +212,14 @@ function buildKeywordSelector(current = []) {
 
   function refreshAvailable() {
     clear(available);
-    cats.tags
-      .filter(t => !selectedKeywords.includes(t))
-      .forEach(t => {
+    Object.entries(cats.tags).forEach(([group, groupTags]) => {
+      const visible = Array.isArray(groupTags) ? groupTags.filter(t => !selectedKeywords.includes(t)) : [];
+      if (!visible.length) return;
+      const groupLabel = document.createElement("span");
+      groupLabel.className = "tag-group-label";
+      groupLabel.textContent = group;
+      available.appendChild(groupLabel);
+      visible.forEach(t => {
         const span = document.createElement("span");
         span.className = "tag tag-available";
         span.textContent = t;
@@ -227,6 +232,7 @@ function buildKeywordSelector(current = []) {
         });
         available.appendChild(span);
       });
+    });
   }
 
   refreshSelected();
@@ -524,17 +530,25 @@ function renderInlineEditor(card, data, index) {
     });
 
     clear(availKw);
-    cats.tags.filter(t => !editKeywords.includes(t)).forEach(t => {
-      const span = document.createElement("span");
-      span.className = "tag tag-available";
-      span.textContent = t;
-      span.addEventListener("click", () => {
-        if (!editKeywords.includes(t)) {
-          editKeywords.push(t);
-          refreshEditKw();
-        }
+    Object.entries(cats.tags).forEach(([group, groupTags]) => {
+      const visible = Array.isArray(groupTags) ? groupTags.filter(t => !editKeywords.includes(t)) : [];
+      if (!visible.length) return;
+      const groupLabel = document.createElement("span");
+      groupLabel.className = "tag-group-label";
+      groupLabel.textContent = group;
+      availKw.appendChild(groupLabel);
+      visible.forEach(t => {
+        const span = document.createElement("span");
+        span.className = "tag tag-available";
+        span.textContent = t;
+        span.addEventListener("click", () => {
+          if (!editKeywords.includes(t)) {
+            editKeywords.push(t);
+            refreshEditKw();
+          }
+        });
+        availKw.appendChild(span);
       });
-      availKw.appendChild(span);
     });
   }
 

@@ -6,21 +6,13 @@ import {
   PERIODS,
   DAYS,
   loadUserTimezone,
-  convertPeriod,
   getTzAbbr,
-  getTzLabel,
   getCurrentTimeInTz,
   convertRange
 } from "./timezone.js";
 
-import { button, clear } from "./ui.js";
-
 // ========== FORM SECTION ==========
 
-/**
- * Creates a collapsible availability section for the add/edit form.
- * Returns { el, getData, setData }
- */
 export function createAvailabilitySection(initial = null) {
   const wrap = document.createElement("div");
   wrap.className = "availability-section";
@@ -34,80 +26,85 @@ export function createAvailabilitySection(initial = null) {
   content.className = "availability-content collapsed";
 
   let isOpen = false;
-
   toggle.addEventListener("click", () => {
     isOpen = !isOpen;
     content.classList.toggle("collapsed", !isOpen);
     toggle.textContent = isOpen ? "－ Availability" : "＋ Add Availability";
   });
 
-  // Timezone select
+  // Timezone input + datalist
   const tzLabel = document.createElement("label");
   tzLabel.textContent = "Their Timezone";
 
-  const tzSelect = document.createElement("select");
-  tzSelect.className = "tz-select";
+  const datalistId = `tz-options-${Math.random().toString(36).slice(2, 7)}`;
 
-  const emptyOpt = document.createElement("option");
-  emptyOpt.value = "";
-  emptyOpt.textContent = "Select timezone...";
-  tzSelect.appendChild(emptyOpt);
+  const tzInput = document.createElement("input");
+  tzInput.type = "text";
+  tzInput.placeholder = "Search timezone...";
+  tzInput.setAttribute("list", datalistId);
 
-  COMMON_TIMEZONES.forEach(({ label, iana }) => {
+  const tzDatalist = document.createElement("datalist");
+  tzDatalist.id = datalistId;
+  COMMON_TIMEZONES.forEach(({ label }) => {
     const opt = document.createElement("option");
-    opt.value = iana;
-    opt.textContent = label;
-    tzSelect.appendChild(opt);
+    opt.value = label;
+    tzDatalist.appendChild(opt);
   });
 
-  // Active periods
-  const periodsLabel = document.createElement("label");
-  periodsLabel.textContent = "Active Periods";
+  function getSelectedTz() {
+    const match = COMMON_TIMEZONES.find(t => t.label === tzInput.value.trim());
+    return match ? match.iana : "";
+  }
 
-  const periodsWrap = document.createElement("div");
-  periodsWrap.className = "toggle-group";
+  // ========== Days toggle buttons ==========
+  const selectedDays = new Set();
+  const selectedPeriods = new Set();
 
-  const periodState = {};
-  PERIODS.forEach(({ id, label }) => {
-    periodState[id] = false;
-
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "toggle-btn";
-    btn.textContent = label;
-    btn.dataset.id = id;
-
-    btn.addEventListener("click", () => {
-      periodState[id] = !periodState[id];
-      btn.classList.toggle("active", periodState[id]);
-    });
-
-    periodsWrap.appendChild(btn);
-  });
-
-  // Active days
   const daysLabel = document.createElement("label");
-  daysLabel.textContent = "Available Days";
+  daysLabel.textContent = "Days";
 
-  const daysWrap = document.createElement("div");
-  daysWrap.className = "toggle-group";
+  const daysGroup = document.createElement("div");
+  daysGroup.className = "toggle-group";
 
-  const dayState = {};
   DAYS.forEach(({ id, label }) => {
-    dayState[id] = false;
-
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "toggle-btn";
     btn.textContent = label;
-    btn.dataset.id = id;
-
     btn.addEventListener("click", () => {
-      dayState[id] = !dayState[id];
-      btn.classList.toggle("active", dayState[id]);
+      if (selectedDays.has(id)) {
+        selectedDays.delete(id);
+        btn.classList.remove("active");
+      } else {
+        selectedDays.add(id);
+        btn.classList.add("active");
+      }
     });
+    daysGroup.appendChild(btn);
+  });
 
-    daysWrap.appendChild(btn);
+  // ========== Periods toggle buttons ==========
+  const periodsLabel = document.createElement("label");
+  periodsLabel.textContent = "Time of Day";
+
+  const periodsGroup = document.createElement("div");
+  periodsGroup.className = "toggle-group";
+
+  PERIODS.forEach(({ id, label }) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "toggle-btn";
+    btn.textContent = label;
+    btn.addEventListener("click", () => {
+      if (selectedPeriods.has(id)) {
+        selectedPeriods.delete(id);
+        btn.classList.remove("active");
+      } else {
+        selectedPeriods.add(id);
+        btn.classList.add("active");
+      }
+    });
+    periodsGroup.appendChild(btn);
   });
 
   // Hour range (optional)
@@ -131,42 +128,39 @@ export function createAvailabilitySection(initial = null) {
   rangeHint.className = "range-hint";
 
   function updateRangeHint() {
-    const tz = tzSelect.value;
+    const tz = getSelectedTz();
     const userTz = loadUserTimezone();
     if (!tz || !fromInput.value || !toInput.value || tz === userTz) {
       rangeHint.textContent = "";
       return;
     }
     const result = convertRange(fromInput.value, toInput.value, tz, userTz);
-    if (result) {
-      rangeHint.textContent = `→ ${result.from} - ${result.to} your time`;
-    } else {
-      rangeHint.textContent = "";
-    }
+    rangeHint.textContent = result ? `→ ${result.from} - ${result.to} your time` : "";
   }
 
   fromInput.addEventListener("input", updateRangeHint);
   toInput.addEventListener("input", updateRangeHint);
-  tzSelect.addEventListener("change", updateRangeHint);
+  tzInput.addEventListener("input", updateRangeHint);
 
   hoursWrap.append(fromInput, toInput, rangeHint);
-
-  content.append(tzLabel, tzSelect, periodsLabel, periodsWrap, daysLabel, daysWrap, hoursLabel, hoursWrap);
+  content.append(tzLabel, tzInput, tzDatalist, daysLabel, daysGroup, periodsLabel, periodsGroup, hoursLabel, hoursWrap);
   wrap.append(toggle, content);
 
   // ========== Data helpers ==========
 
   function getData() {
-    const tz = tzSelect.value;
-    const periods = Object.entries(periodState).filter(([,v]) => v).map(([k]) => k);
-    const days = Object.entries(dayState).filter(([,v]) => v).map(([k]) => k);
+    const tz = getSelectedTz();
+    const slots = [];
+    selectedDays.forEach(dayId => {
+      selectedPeriods.forEach(periodId => slots.push(`${dayId}_${periodId}`));
+    });
     const hours = (fromInput.value || toInput.value) ? {
       from: fromInput.value.trim(),
       to: toInput.value.trim()
     } : null;
 
-    if (!tz && periods.length === 0 && days.length === 0 && !hours) return null;
-    return { timezone: tz || null, periods, days, hours };
+    if (!tz && !slots.length && !hours) return null;
+    return { timezone: tz || null, slots, hours };
   }
 
   function setData(data) {
@@ -176,23 +170,39 @@ export function createAvailabilitySection(initial = null) {
     content.classList.remove("collapsed");
     toggle.textContent = "－ Availability";
 
-    if (data.timezone) tzSelect.value = data.timezone;
+    if (data.timezone) {
+      const match = COMMON_TIMEZONES.find(t => t.iana === data.timezone);
+      tzInput.value = match ? match.label : "";
+    }
 
-    if (data.periods) {
-      data.periods.forEach(id => {
-        periodState[id] = true;
-        const btn = periodsWrap.querySelector(`[data-id="${id}"]`);
-        if (btn) btn.classList.add("active");
+    // Normalize to slots
+    const slotsToSet = [];
+    if (data.slots) {
+      slotsToSet.push(...data.slots);
+    } else if (data.days && data.periods) {
+      data.days.forEach(dayId => {
+        data.periods.forEach(periodId => slotsToSet.push(`${dayId}_${periodId}`));
       });
     }
 
-    if (data.days) {
-      data.days.forEach(id => {
-        dayState[id] = true;
-        const btn = daysWrap.querySelector(`[data-id="${id}"]`);
-        if (btn) btn.classList.add("active");
-      });
-    }
+    // Extract unique days and periods from slots
+    slotsToSet.forEach(slot => {
+      const [dayId, periodId] = slot.split("_");
+      selectedDays.add(dayId);
+      selectedPeriods.add(periodId);
+    });
+
+    // Update day buttons
+    daysGroup.querySelectorAll(".toggle-btn").forEach(btn => {
+      const day = DAYS.find(d => d.label === btn.textContent);
+      if (day && selectedDays.has(day.id)) btn.classList.add("active");
+    });
+
+    // Update period buttons
+    periodsGroup.querySelectorAll(".toggle-btn").forEach(btn => {
+      const period = PERIODS.find(p => p.label === btn.textContent);
+      if (period && selectedPeriods.has(period.id)) btn.classList.add("active");
+    });
 
     if (data.hours) {
       fromInput.value = data.hours.from || "";
@@ -208,15 +218,21 @@ export function createAvailabilitySection(initial = null) {
 
 // ========== CARD DISPLAY ==========
 
-/**
- * Renders availability info on a readonly card.
- * Shows their timezone + periods, then converted local time below.
- */
 export function renderAvailabilityDisplay(availability) {
   if (!availability) return null;
 
-  const { timezone, periods = [], days = [], hours = null } = availability;
-  if (!timezone && periods.length === 0 && days.length === 0 && !hours) return null;
+  // Normalize to slot set — handles both new (slots[]) and old (days+periods) formats
+  const slotSet = new Set();
+  if (availability.slots) {
+    availability.slots.forEach(s => slotSet.add(s));
+  } else if (availability.days && availability.periods) {
+    availability.days.forEach(d =>
+      availability.periods.forEach(p => slotSet.add(`${d}_${p}`))
+    );
+  }
+
+  const { timezone, hours = null } = availability;
+  if (!timezone && !slotSet.size && !hours) return null;
 
   const userTz = loadUserTimezone();
   const wrap = document.createElement("div");
@@ -232,40 +248,57 @@ export function renderAvailabilityDisplay(availability) {
     clockRow.className = "avail-clock";
 
     function updateClock() {
-      const time = getCurrentTimeInTz(timezone);
-      const abbr = getTzAbbr(timezone);
-      clockRow.textContent = `🕐 Now: ${time} ${abbr}`;
+      clockRow.textContent = `🕐 Now: ${getCurrentTimeInTz(timezone)} ${getTzAbbr(timezone)}`;
     }
     updateClock();
-    // Update every 30 seconds, close enough
     const interval = setInterval(updateClock, 30000);
-    // Clean up when card is removed
     const observer = new MutationObserver(() => {
-      if (!wrap.isConnected) {
-        clearInterval(interval);
-        observer.disconnect();
-      }
+      if (!wrap.isConnected) { clearInterval(interval); observer.disconnect(); }
     });
     observer.observe(document.body, { childList: true, subtree: true });
-
     wrap.appendChild(clockRow);
   }
 
-  // Timezone row
-  if (timezone) {
-    const tzRow = document.createElement("div");
-    tzRow.className = "avail-tz-row";
-    const theirAbbr = getTzAbbr(timezone);
-    const yourAbbr = getTzAbbr(userTz);
-    const sameZone = timezone === userTz;
-    tzRow.textContent = sameZone
-      ? `Timezone: ${theirAbbr}`
-      : `Timezone: ${theirAbbr} → your ${yourAbbr}`;
-    wrap.appendChild(tzRow);
+  // Mini grid — only rows with at least one selected slot
+  if (slotSet.size > 0) {
+    const table = document.createElement("table");
+    table.className = "avail-grid avail-grid-readonly";
+
+    const thead = document.createElement("thead");
+    const headerRow = document.createElement("tr");
+    headerRow.appendChild(document.createElement("th"));
+    DAYS.forEach(({ label }) => {
+      const th = document.createElement("th");
+      th.textContent = label[0]; // single letter
+      headerRow.appendChild(th);
+    });
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
+
+    const tbody = document.createElement("tbody");
+    PERIODS.forEach(({ id: periodId, label: periodLabel }) => {
+      if (!DAYS.some(({ id: dayId }) => slotSet.has(`${dayId}_${periodId}`))) return;
+
+      const row = document.createElement("tr");
+      const th = document.createElement("th");
+      th.textContent = periodLabel.slice(0, 3);
+      row.appendChild(th);
+
+      DAYS.forEach(({ id: dayId }) => {
+        const td = document.createElement("td");
+        td.className = "avail-cell";
+        if (slotSet.has(`${dayId}_${periodId}`)) td.classList.add("active");
+        row.appendChild(td);
+      });
+
+      tbody.appendChild(row);
+    });
+    table.appendChild(tbody);
+    wrap.appendChild(table);
   }
 
-  // Hour range
-  if (hours && (hours.from || hours.to) && timezone && timezone !== userTz) {
+  // Hours range
+  if (hours && (hours.from || hours.to)) {
     const rangeRow = document.createElement("div");
     rangeRow.className = "avail-periods";
 
@@ -274,56 +307,17 @@ export function renderAvailabilityDisplay(availability) {
     theirSpan.textContent = `${hours.from} - ${hours.to} their time`;
     rangeRow.appendChild(theirSpan);
 
-    const result = convertRange(hours.from, hours.to, timezone, userTz);
-    if (result) {
-      const yourSpan = document.createElement("span");
-      yourSpan.className = "avail-yours";
-      yourSpan.textContent = `→ ${result.from} - ${result.to} your time`;
-      rangeRow.appendChild(yourSpan);
-    }
-
-    wrap.appendChild(rangeRow);
-  }
-
-  // Periods
-  if (periods.length > 0) {
-    const periodsRow = document.createElement("div");
-    periodsRow.className = "avail-periods";
-
-    const theirLabels = periods.map(id => PERIODS.find(p => p.id === id)?.label).filter(Boolean);
-    const theirSpan = document.createElement("span");
-    theirSpan.className = "avail-their";
-    theirSpan.textContent = theirLabels.join(", ");
-    periodsRow.appendChild(theirSpan);
-
     if (timezone && timezone !== userTz) {
-      const converted = [...new Set(
-        periods.map(id => convertPeriod(id, timezone, userTz)).filter(Boolean)
-      )];
-      if (converted.length > 0) {
+      const result = convertRange(hours.from, hours.to, timezone, userTz);
+      if (result) {
         const yourSpan = document.createElement("span");
         yourSpan.className = "avail-yours";
-        yourSpan.textContent = `→ ${converted.join(", ")} your time`;
-        periodsRow.appendChild(yourSpan);
+        yourSpan.textContent = `→ ${result.from} - ${result.to} your time`;
+        rangeRow.appendChild(yourSpan);
       }
     }
 
-    wrap.appendChild(periodsRow);
-  }
-
-  // Days
-  if (days.length > 0) {
-    const daysRow = document.createElement("div");
-    daysRow.className = "avail-days";
-    days.forEach(id => {
-      const day = DAYS.find(d => d.id === id);
-      if (!day) return;
-      const span = document.createElement("span");
-      span.className = "tag tag-day";
-      span.textContent = day.label;
-      daysRow.appendChild(span);
-    });
-    wrap.appendChild(daysRow);
+    wrap.appendChild(rangeRow);
   }
 
   return wrap;

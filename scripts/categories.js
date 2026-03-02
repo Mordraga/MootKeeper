@@ -77,12 +77,19 @@ function renderCategoryModal(body, onUpdate) {
 
   function refreshTags() {
     clear(tagTags);
-    loadCategories().tags.forEach(t => {
-      tagTags.appendChild(tag(t, (name) => {
-        removeTag(name);
-        refreshTags();
-        if (onUpdate) onUpdate();
-      }));
+    Object.entries(loadCategories().tags).forEach(([group, tags]) => {
+      if (!Array.isArray(tags) || !tags.length) return;
+      const groupLabel = document.createElement("span");
+      groupLabel.className = "cat-group-label";
+      groupLabel.textContent = group;
+      tagTags.appendChild(groupLabel);
+      tags.forEach(t => {
+        tagTags.appendChild(tag(t, (name) => {
+          removeTag(name);
+          refreshTags();
+          if (onUpdate) onUpdate();
+        }));
+      });
     });
   }
   refreshTags();
@@ -94,8 +101,17 @@ function renderCategoryModal(body, onUpdate) {
   tagInput.type = "text";
   tagInput.placeholder = "Add tag...";
 
+  const tagGroupSelect = document.createElement("select");
+  tagGroupSelect.className = "cat-group-select";
+  Object.keys(loadCategories().tags).forEach(g => {
+    const opt = document.createElement("option");
+    opt.value = g;
+    opt.textContent = g;
+    tagGroupSelect.appendChild(opt);
+  });
+
   const tagAddBtn = button("Add", () => {
-    if (addTag(tagInput.value)) {
+    if (addTag(tagInput.value, tagGroupSelect.value)) {
       tagInput.value = "";
       refreshTags();
       if (onUpdate) onUpdate();
@@ -106,7 +122,7 @@ function renderCategoryModal(body, onUpdate) {
     if (e.key === "Enter") tagAddBtn.click();
   });
 
-  tagInputWrap.append(tagInput, tagAddBtn);
+  tagInputWrap.append(tagGroupSelect, tagInput, tagAddBtn);
   tagSection.append(tagTitle, tagTags, tagInputWrap);
 
   body.append(relSection, tagSection);
