@@ -5,7 +5,11 @@ import {
   addContact,
   updateContact,
   deleteContact,
-  loadCategories
+  loadCategories,
+  isLoggedIn,
+  loginWithTwitch,
+  logout,
+  handleCallback
 } from "./storage.js";
 
 import {
@@ -567,9 +571,21 @@ addLinkBtn.addEventListener("click", () => {
   linksContainer.appendChild(createLinkPair());
 });
 
-// ========== Init ==========
-initSidePanel();
-initFilterBar();
-ensureOneLinkPair();
-rebuildFormDropdowns();
-renderAllContacts();
+// ========== Auth Init ==========
+handleCallback();
+
+const loginScreen = document.getElementById("login-screen");
+const appScreen = document.getElementById("app-screen");
+
+if (!isLoggedIn()) {
+  loginScreen.style.display = "";
+  document.getElementById("login-btn").addEventListener("click", loginWithTwitch);
+} else {
+  appScreen.style.display = "";
+  document.getElementById("logout-btn").addEventListener("click", logout);
+  initSidePanel();
+  initFilterBar();
+  ensureOneLinkPair();
+  rebuildFormDropdowns();
+  renderAllContacts();
+}

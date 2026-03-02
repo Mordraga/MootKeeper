@@ -2,6 +2,7 @@
 
 const API_BASE = "https://streamernetworkfastapi-production.up.railway.app";
 const CATEGORIES_KEY = "streamCategories";
+const TOKEN_KEY = "twitch_token";
 
 const DEFAULT_CATEGORIES = {
   relationships: ["Collab", "Artist", "Friend", "Mod", "Viewer", "Other"],
@@ -9,12 +10,67 @@ const DEFAULT_CATEGORIES = {
 };
 
 // =============================
+// AUTH
+// =============================
+
+export function getToken() {
+  return localStorage.getItem(TOKEN_KEY);
+}
+
+export function setToken(token) {
+  localStorage.setItem(TOKEN_KEY, token);
+}
+
+export function clearToken() {
+  localStorage.removeItem(TOKEN_KEY);
+}
+
+export function isLoggedIn() {
+  return !!getToken();
+}
+
+export function loginWithTwitch() {
+  window.location.href = `${API_BASE}/auth/login`;
+}
+
+export function logout() {
+  clearToken();
+  window.location.reload();
+}
+
+function authHeaders() {
+  const token = getToken();
+  return {
+    "Content-Type": "application/json",
+    ...(token ? { "Authorization": `Bearer ${token}` } : {})
+  };
+}
+
+// Handle callback - grab token from URL hash
+export function handleCallback() {
+  const hash = window.location.hash;
+  if (hash.startsWith("#token=")) {
+    const token = hash.slice(7);
+    setToken(token);
+    window.history.replaceState(null, "", window.location.pathname);
+    return true;
+  }
+  return false;
+}
+
+// =============================
 // CONTACTS (API)
 // =============================
 
 export async function loadContacts() {
   try {
-    const res = await fetch(`${API_BASE}/contacts`);
+    const res = await fetch(`${API_BASE}/contacts`, {
+      headers: authHeaders()
+    });
+    if (res.status === 401) {
+      clearToken();
+      return [];
+    }
     if (!res.ok) throw new Error("Failed to fetch contacts");
     return await res.json();
   } catch (err) {
@@ -27,7 +83,7 @@ export async function addContact(data) {
   try {
     const res = await fetch(`${API_BASE}/contacts`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: authHeaders(),
       body: JSON.stringify(data)
     });
     if (!res.ok) throw new Error("Failed to add contact");
@@ -41,7 +97,7 @@ export async function updateContact(id, updated) {
   try {
     const res = await fetch(`${API_BASE}/contacts/${id}`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      headers: authHeaders(),
       body: JSON.stringify(updated)
     });
     if (!res.ok) throw new Error("Failed to update contact");
@@ -54,7 +110,8 @@ export async function updateContact(id, updated) {
 export async function deleteContact(id) {
   try {
     const res = await fetch(`${API_BASE}/contacts/${id}`, {
-      method: "DELETE"
+      method: "DELETE",
+      headers: authHeaders()
     });
     if (!res.ok) throw new Error("Failed to delete contact");
     return await res.json();
@@ -64,7 +121,7 @@ export async function deleteContact(id) {
 }
 
 // =============================
-// CATEGORIES (localStorage - user-local config)
+// CATEGORIES (localStorage)
 // =============================
 
 export function loadCategories() {
