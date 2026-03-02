@@ -185,6 +185,6 @@ export async function loadUserInfo() {
   p.style.margin = "0";
   
   const logoutBtn = document.getElementById("logout-btn");
-  logoutBtn.before(p);
   logoutBtn.before(img);
+  logoutBtn.before(p);
 }
