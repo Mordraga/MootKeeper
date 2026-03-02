@@ -266,57 +266,47 @@ select:focus {
 
 /* ========== KEYWORD SELECTOR ========== */
 
-.tag-group-content {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  overflow: hidden;
-  transition: max-height 0.25s ease, opacity 0.2s ease;
-  max-height: 500px;
-  opacity: 1;
-}
-
 .keyword-selector {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.selected-keywords{
+.selected-keywords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+
   padding: 0.4rem;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
 }
 
-.selected-keywords,
 .available-keywords {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  min-height: 32px;
-}
+  flex-direction: column;
+  gap: 0.6rem;
 
-.available-keywords {
   padding: 0.4rem;
   background: var(--surface2);
   border: 1px dashed var(--border);
   border-radius: var(--radius);
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
 }
 
-.tag-group.collapsed .tag-group-content {
-  max-height: 0;
-  opacity: 0;
+.tag-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
 }
 
 .tag-group-label {
   cursor: pointer;
   user-select: none;
-  display: block;
-  font-weight: 600;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
 }
 
 .tag-group-label:hover {
@@ -324,14 +314,20 @@ select:focus {
   opacity: 0.8;
 }
 
-.tag-group-label,
-.cat-group-label {
-  flex-basis: 100%;
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text-muted);
-  margin-top: 0.25rem;
+.tag-group-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+
+  overflow: hidden;
+  transition: max-height 0.25s ease, opacity 0.2s ease;
+  max-height: 500px;
+  opacity: 1;
+}
+
+.tag-group.collapsed .tag-group-content {
+  max-height: 0;
+  opacity: 0;
 }
 
 /* ========== TAGS ========== */
