@@ -109,6 +109,7 @@ function initSidePanel() {
       onClick: () => openTimezoneModal()
     }
   ]);
+
   inner.appendChild(buildAuthCard());
   document.body.insertBefore(panel, document.body.firstChild);
 }
@@ -538,12 +539,26 @@ function renderInlineEditor(card, data, index) {
 
     clear(availKw);
     Object.entries(cats.tags).forEach(([group, groupTags]) => {
-      const visible = Array.isArray(groupTags) ? groupTags.filter(t => !editKeywords.includes(t)) : [];
+      const visible = Array.isArray(groupTags)
+        ? groupTags.filter(t => !editKeywords.includes(t))
+        : [];
+
       if (!visible.length) return;
+
+      const groupSection = document.createElement("div");
+      groupSection.className = "tag-group";
+
       const groupLabel = document.createElement("span");
       groupLabel.className = "tag-group-label";
       groupLabel.textContent = group;
-      availKw.appendChild(groupLabel);
+
+      const groupContent = document.createElement("div");
+      groupContent.className = "tag-group-content";
+
+      groupLabel.addEventListener("click", () => {
+        groupSection.classList.toggle("collapsed");
+      });
+
       visible.forEach(t => {
         const span = document.createElement("span");
         span.className = "tag tag-available";
@@ -554,8 +569,11 @@ function renderInlineEditor(card, data, index) {
             refreshEditKw();
           }
         });
-        availKw.appendChild(span);
+        groupContent.appendChild(span);
       });
+
+      groupSection.append(groupLabel, groupContent);
+      availKw.appendChild(groupSection);
     });
   }
 

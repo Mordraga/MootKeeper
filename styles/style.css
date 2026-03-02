@@ -266,6 +266,16 @@ select:focus {
 
 /* ========== KEYWORD SELECTOR ========== */
 
+.tag-group-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  overflow: hidden;
+  transition: max-height 0.25s ease, opacity 0.2s ease;
+  max-height: 500px;
+  opacity: 1;
+}
+
 .keyword-selector {
   display: flex;
   flex-direction: column;
@@ -292,6 +302,33 @@ select:focus {
   background: var(--surface2);
   border: 1px dashed var(--border);
   border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.tag-group-content {
+  overflow: hidden;
+  transition: max-height 0.25s ease, opacity 0.2s ease;
+  max-height: 500px; /* big enough to fit content */
+  opacity: 1;
+}
+
+.tag-group.collapsed .tag-group-content {
+  max-height: 0;
+  opacity: 0;
+}
+
+.tag-group-label {
+  cursor: pointer;
+  user-select: none;
+  display: block;
+  font-weight: 600;
+}
+
+.tag-group-label:hover {
+  color: var(--accent);
+  opacity: 0.8;
 }
 
 .tag-group-label,
