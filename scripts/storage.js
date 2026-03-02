@@ -167,7 +167,7 @@ export function removeTag(name) {
   saveCategories(cats);
 }
 
-async function loadUserInfo() {
+export async function loadUserInfo() {
   const res = await fetch(`${API_BASE}/auth/validate`, {
     headers: authHeaders()
   });
