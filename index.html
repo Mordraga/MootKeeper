@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./styles/style.css"/>
+  <title>Stream Network</title>
+</head>
+<body>
+
+  <div class="layout">
+    <main class="card">
+      <h1>Stream Network</h1>
+
+      <div id="Network" class="inner-card">
+
+        <form id="contact-form">
+
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" placeholder="VTuber name..." required>
+
+          <div class="links-block">
+            <label>Links</label>
+            <div id="links-container"></div>
+            <button type="button" id="add-link" aria-label="Add link">+ Add Link</button>
+          </div>
+
+          <label for="relationship">Relationship</label>
+          <div id="relationship-container"></div>
+
+          <label>Keywords</label>
+          <div id="keywords-container"></div>
+
+          <button type="submit" class="btn-primary">Add Contact</button>
+
+        </form>
+
+        <div id="event-holder"></div>
+
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="./scripts/CardBuilder.js" defer></script>
+</body>
+</html>
