@@ -307,13 +307,6 @@ select:focus {
   gap: 0.4rem;
 }
 
-.tag-group-content {
-  overflow: hidden;
-  transition: max-height 0.25s ease, opacity 0.2s ease;
-  max-height: 500px; /* big enough to fit content */
-  opacity: 1;
-}
-
 .tag-group.collapsed .tag-group-content {
   max-height: 0;
   opacity: 0;
