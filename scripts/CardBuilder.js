@@ -10,7 +10,9 @@ import {
   loginWithTwitch,
   logout,
   handleCallback,
-  loadUserInfo
+  loadUserInfo,
+  loadOnboardingDismissed,
+  saveOnboardingDismissed
 } from "./storage.js";
 
 
@@ -35,6 +37,8 @@ const eventHolder = qs("event-holder");
 const addLinkBtn = qs("add-link");
 const linksContainer = qs("links-container");
 const nameInput = qs("name");
+const onboardingCard = qs("onboarding");
+const dismissBtn = qs("dismiss");
 
 // Relationship dropdown - replaces text input
 const relContainer = qs("relationship-container");
@@ -678,10 +682,28 @@ addLinkBtn.addEventListener("click", () => {
   linksContainer.appendChild(createLinkPair());
 });
 
+// ========== Onboarding ==========
+async function initOnboarding() {
+  if (!onboardingCard || !dismissBtn) return;
+
+  const alreadyDismissed = await loadOnboardingDismissed();
+  if (alreadyDismissed) onboardingCard.classList.add("hidden");
+
+  dismissBtn.addEventListener("click", async () => {
+    onboardingCard.classList.add("hidden");
+    await saveOnboardingDismissed(true);
+  });
+}
+
 // ========== Init ==========
-handleCallback();
-initSidePanel();
-initFilterBar();
-ensureOneLinkPair();
-rebuildFormDropdowns();
-renderAllContacts();
+async function init() {
+  handleCallback();
+  initSidePanel();
+  initFilterBar();
+  ensureOneLinkPair();
+  rebuildFormDropdowns();
+  await initOnboarding();
+  renderAllContacts();
+}
+
+init();
