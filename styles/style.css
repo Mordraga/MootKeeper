@@ -898,3 +898,33 @@ button:hover {
     margin-left: var(--panel-width);
   }
 }
+#onboarding {
+  margin-bottom: 1rem;
+}
+
+#onboarding p {
+  margin-bottom: 0.4rem;
+}
+
+#onboarding h3 {
+  text-align: center;
+}
+
+#dismiss {
+  color: #fff;
+  background: var(--danger);
+  border: 1px solid var(--danger-hover);
+  border-radius: var(--radius);
+  display: block;
+  margin: 0.75rem auto 0;
+  padding: 0.5rem 0.9rem;
+  cursor: pointer;
+}
+
+#dismiss:hover {
+  background: var(--danger-hover);
+}
+
+.hidden {
+  display: none;
+}
