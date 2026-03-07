@@ -7,7 +7,7 @@ import {
   removeRelationship,
   addTag,
   removeTag
-} from "./storage.js";
+} from "./categoryStore.js";
 
 import { clear, button, createModal, tag } from "./ui.js";
 
