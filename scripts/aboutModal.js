@@ -1,6 +1,6 @@
 // aboutModal
 
-import { button, createModal } from "./ui.js";
+import {separator, button, createModal } from "./ui.js";
 
 export function openAboutModal() {
     createModal("About MootsKeeper", (body) => {
@@ -35,7 +35,7 @@ export function openAboutModal() {
         body.appendChild(githubLink);
 
 
-        body.appendChild(separator);
+        body.appendChild(separator());
 
         body.appendChild(developerBlurb);
         body.appendChild(twitterLink);
