@@ -59,9 +59,13 @@ function buildAuthCard() {
       name.className = "auth-name";
       name.textContent = `@${data.display_name}`;
 
+      const subtitle = document.createElement("p");
+      subtitle.className = "subtitle";
+      subtitle.textContent = `Signed in with ${provider === "google" ? "Google" : "Twitch"}`;
+
       const logoutBtn = button("Logout", logout, "btn-sm");
 
-      card.append(img, name, logoutBtn);
+      card.append(img, name, subtitle, logoutBtn);
     }).catch(() => logout());
   } else {
     const prompt = document.createElement("p");
