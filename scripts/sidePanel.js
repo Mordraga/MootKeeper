@@ -5,6 +5,38 @@ import { clear, button, createSidePanel } from "./ui.js";
 import { openCategoryManager } from "./categories.js";
 import { openTimezoneModal } from "./timezoneModal.js";
 
+function createTwitchLoginButton() {
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "auth-brand-btn btn-twitch-brand";
+  btn.setAttribute("aria-label", "Sign in with Twitch");
+
+  const img = document.createElement("img");
+  img.src = "/assets/twitch_wordmark_flat_white.png";
+  img.alt = "Sign in with Twitch";
+  img.className = "auth-brand-art twitch-wordmark-img";
+
+  btn.appendChild(img);
+  btn.addEventListener("click", loginWithTwitch);
+  return btn;
+}
+
+function createGoogleLoginButton() {
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "auth-brand-btn btn-google";
+  btn.setAttribute("aria-label", "Sign in with Google");
+
+  const img = document.createElement("img");
+  img.src = "/assets/web_dark_rd_SI@1x.png";
+  img.alt = "Sign in with Google";
+  img.className = "auth-brand-art google-signin-img";
+
+  btn.appendChild(img);
+  btn.addEventListener("click", loginWithGoogle);
+  return btn;
+}
+
 function buildAuthCard() {
   const card = document.createElement("div");
   card.className = "auth-card";
@@ -36,10 +68,8 @@ function buildAuthCard() {
     prompt.className = "auth-prompt";
     prompt.textContent = "Login to sync contacts across devices";
 
-    const loginBtnGoogle = button("Login with Google", loginWithGoogle, "btn-secondary");
-    const loginBtnTwitch = button("Login with Twitch", loginWithTwitch, "btn-primary");
-    loginBtnGoogle.style.width = "100%";
-    loginBtnTwitch.style.width = "100%";
+    const loginBtnTwitch = createTwitchLoginButton();
+    const loginBtnGoogle = createGoogleLoginButton();
 
     card.append(prompt, loginBtnTwitch, loginBtnGoogle);
   }

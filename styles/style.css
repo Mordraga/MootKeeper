@@ -387,17 +387,55 @@ button:hover {
   background: var(--border);
 }
 
-.btn-primary {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: white;
-  font-size: 1rem;
-  padding: 0.65rem 1rem;
+.auth-brand-btn {
+  all: unset;
+  width: 179px;
+  height: 40px;
+  max-width: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  line-height: 0;
+  border-radius: 999px;
 }
 
-.btn-primary:hover {
-  background: var(--accent-hover);
-  border-color: var(--accent-hover);
+.btn-twitch-brand {
+  box-sizing: border-box;
+  padding: 0 12px;
+  background: #9146ff;
+  border: 1px solid #7f3ce0;
+}
+
+.btn-twitch-brand:hover {
+  background: #7f3ce0;
+  border-color: #6f35c9;
+}
+
+.btn-google:hover {
+  background: transparent;
+}
+
+.auth-brand-btn:focus-visible {
+  outline: 2px solid #8ab4f8;
+  outline-offset: 2px;
+}
+
+.auth-brand-art {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+}
+
+.twitch-wordmark-img {
+  height: 16px;
+}
+
+.google-signin-img {
+  width: 179px;
+  height: 40px;
 }
 
 .btn-sm {
