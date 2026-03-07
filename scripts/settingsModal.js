@@ -2,7 +2,8 @@ import {
     saveUserTimeFormatPref,
     userTimeFormatPref,
     saveDisplayNameOverride,
-    formatTime
+    formatTime,
+    loadDisplayNameOverride
 } from './settings.js';
 
 import { 
@@ -106,6 +107,11 @@ export function openSettingsModal() {
                 const displayNameInput = document.createElement("input");
                 displayNameInput.type = "text";
                 displayNameInput.placeholder = "Enter a custom display name...";
+                displayNameInput.addEventListener("change", () => {
+                    const newName = displayNameInput.value.trim();
+                    saveDisplayNameOverride(newName);
+                    renderAllContacts();
+                });
 
                 const displayNameContainer = document.createElement("div");
                 displayNameContainer.className = "setting-item";
