@@ -5,6 +5,7 @@ import { clear, button, createSidePanel } from "./ui.js";
 import { openCategoryManager } from "./categories.js";
 import { openAboutModal } from "./aboutModal.js";
 import { openSettingsModal } from "./settingsModal.js";
+import { loadDisplayNameOverride } from "./settings.js";
 
 function createTwitchLoginButton() {
   const btn = document.createElement("button");
@@ -58,7 +59,8 @@ function buildAuthCard() {
 
       const name = document.createElement("p");
       name.className = "auth-name";
-      name.textContent = `@${data.display_name}`;
+      const override = loadDisplayNameOverride();
+      name.textContent = `@${override || data.display_name}`;
 
       const subtitle = document.createElement("p");
       subtitle.className = "subtitle";
