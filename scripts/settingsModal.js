@@ -12,7 +12,7 @@ import {
     detectTimezone 
 } from "./timezone.js";
 
-import { button, seperator, createModal, updateModal } from './ui.js';
+import { button, separator, createModal, updateModal } from './ui.js';
 
 import { renderAllContacts } from "./contactList.js";
 
