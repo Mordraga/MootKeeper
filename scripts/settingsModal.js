@@ -19,6 +19,8 @@ import { isLoggedIn, loadUserInfo } from "./auth.js";
 
 import { renderAllContacts } from "./contactList.js";
 
+import { savePreference } from "./preferences.js";
+
 export function openSettingsModal() {
     createModal("Settings", (body) => {
         // Time Format Setting
@@ -110,6 +112,7 @@ export function openSettingsModal() {
                 displayNameInput.addEventListener("change", () => {
                     const newName = displayNameInput.value.trim();
                     saveDisplayNameOverride(newName);
+                    savePreference("displayNameOverride", newName);
                     renderAllContacts();
                 });
 
