@@ -109,6 +109,13 @@ export function openSettingsModal() {
                 const displayNameInput = document.createElement("input");
                 displayNameInput.type = "text";
                 displayNameInput.placeholder = "Enter a custom display name...";
+                const displayNameButton = button("Save", () => {
+                    const newName = displayNameInput.value.trim();
+                    saveDisplayNameOverride(newName);
+                    savePreference("displayNameOverride", newName);
+                    renderAllContacts();
+                }, "btn-primary");
+
                 displayNameInput.addEventListener("change", () => {
                     const newName = displayNameInput.value.trim();
                     saveDisplayNameOverride(newName);
