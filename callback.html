@@ -27,7 +27,7 @@
         const data = await res.json();
         if (data.access_token) {
           localStorage.setItem(TOKEN_KEY, data.access_token);
-          localStorage.setItem("auth_provider", "twitch");
+          localStorage.setItem("auth_provider", state === "google" ? "google" : "twitch");
         }
       } catch {}
 
