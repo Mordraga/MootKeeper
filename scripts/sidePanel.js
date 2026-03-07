@@ -1,6 +1,6 @@
 // sidePanel.js
 
-import { isLoggedIn, loginWithTwitch, logout, loadUserInfo } from "./auth.js";
+import { isLoggedIn, loginWithTwitch, loginWithGoogle, logout, loadUserInfo } from "./auth.js";
 import { clear, button, createSidePanel } from "./ui.js";
 import { openCategoryManager } from "./categories.js";
 import { openTimezoneModal } from "./timezoneModal.js";
