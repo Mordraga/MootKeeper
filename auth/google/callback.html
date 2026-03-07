@@ -17,13 +17,19 @@
       }
 
       try {
-        const res = await fetch(`${API_BASE}/auth/google/callback?code=${code}`);
+        const res = await fetch(`${API_BASE}/auth/google/callback?code=${encodeURIComponent(code)}`);
+        if (!res.ok) {
+          const errText = await res.text();
+          throw new Error(`Google callback failed (${res.status}): ${errText}`);
+        }
         const data = await res.json();
         if (data.access_token) {
           localStorage.setItem(TOKEN_KEY, data.access_token);
           localStorage.setItem("auth_provider", "google");
         }
-      } catch {}
+      } catch (err) {
+        console.error(err);
+      }
 
       window.location.href = "/";
     }

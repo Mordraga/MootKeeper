@@ -19,17 +19,23 @@
       }
 
       const endpoint = state === "google"
-        ? `${API_BASE}/auth/google/callback?code=${code}`
-        : `${API_BASE}/auth/callback?code=${code}`;
+        ? `${API_BASE}/auth/google/callback?code=${encodeURIComponent(code)}`
+        : `${API_BASE}/auth/callback?code=${encodeURIComponent(code)}`;
 
       try {
         const res = await fetch(endpoint);
+        if (!res.ok) {
+          const errText = await res.text();
+          throw new Error(`OAuth callback failed (${res.status}): ${errText}`);
+        }
         const data = await res.json();
         if (data.access_token) {
           localStorage.setItem(TOKEN_KEY, data.access_token);
           localStorage.setItem("auth_provider", state === "google" ? "google" : "twitch");
         }
-      } catch {}
+      } catch (err) {
+        console.error(err);
+      }
 
       window.location.href = "/";
     }
