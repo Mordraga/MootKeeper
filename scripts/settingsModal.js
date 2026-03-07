@@ -128,6 +128,7 @@ export function openSettingsModal() {
                 displayNameContainer.className = "setting-item";
                 displayNameContainer.appendChild(displayNameLabel);
                 displayNameContainer.appendChild(displayNameInput);
+                displayNameContainer.appendChild(displayNameButton);
                 body.appendChild(displayNameContainer);
                 updateModal({ displayNameOverride: override }, { displayNameInput });
         }
