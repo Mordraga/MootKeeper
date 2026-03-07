@@ -23,6 +23,10 @@ export function loginWithTwitch() {
   window.location.href = `${API_BASE}/auth/login`;
 }
 
+export function loginWithGoogle() {
+  window.location.href = `${API_BASE}/auth/google/login`;
+}
+
 export function logout() {
   clearToken();
   window.location.reload();

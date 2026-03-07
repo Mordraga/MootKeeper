@@ -36,7 +36,8 @@ function buildAuthCard() {
     prompt.className = "auth-prompt";
     prompt.textContent = "Login to sync contacts across devices";
 
-    const loginBtn = button("Login with Twitch", loginWithTwitch, "btn-primary");
+    const loginBtnGoogle = button("Login with Google", loginWithGoogle, "btn-secondary");
+    const loginBtnTwitch = button("Login with Twitch", loginWithTwitch, "btn-primary");
     loginBtn.style.width = "100%";
 
     card.append(prompt, loginBtn);
