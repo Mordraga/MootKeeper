@@ -8,33 +8,27 @@
   <script>
     const API_BASE = "https://streamernetworkfastapi-production.up.railway.app";
     const TOKEN_KEY = "auth_token";
-    const params = new URLSearchParams(window.location.search);
-    const code = params.get("code");
-    const state = params.get("state");
+    const code = new URLSearchParams(window.location.search).get("code");
 
-    async function handleCallback() {
+    async function handleGoogleCallback() {
       if (!code) {
         window.location.href = "/";
         return;
       }
 
-      const endpoint = state === "google"
-        ? `${API_BASE}/auth/google/callback?code=${code}`
-        : `${API_BASE}/auth/callback?code=${code}`;
-
       try {
-        const res = await fetch(endpoint);
+        const res = await fetch(`${API_BASE}/auth/google/callback?code=${code}`);
         const data = await res.json();
         if (data.access_token) {
           localStorage.setItem(TOKEN_KEY, data.access_token);
-          localStorage.setItem("auth_provider", "twitch");
+          localStorage.setItem("auth_provider", "google");
         }
       } catch {}
 
       window.location.href = "/";
     }
 
-    handleCallback();
+    handleGoogleCallback();
   </script>
   <p>Logging you in...</p>
 </body>
