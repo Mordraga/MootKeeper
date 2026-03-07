@@ -101,7 +101,6 @@ export function openSettingsModal() {
                 displayNameInput.type = "text";
                 displayNameInput.placeholder = "Enter a custom display name...";
 
-                // NOW you can use displayNameInput
                 const override = loadDisplayNameOverride();
                 if (override) {
                     displayNameInput.value = override;
