@@ -930,6 +930,15 @@ button:hover {
   margin: 0;
 }
 
+.auth-card .subtitle {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.25;
+  letter-spacing: 0.01em;
+  margin-top: -0.15rem;
+  margin-bottom: 0.2rem;
+}
+
 .auth-prompt {
   font-size: 0.8rem;
   color: var(--text-muted);
