@@ -94,8 +94,15 @@ export function openSettingsModal() {
 
         // Display Name Override
 
-        if (isLoggedIn()){
-            const override = loadDisplayNameOverride();
+            if (isLoggedIn()) {
+                const displayNameLabel = document.createElement("label");
+                displayNameLabel.textContent = "Change Display Name:";
+                const displayNameInput = document.createElement("input");
+                displayNameInput.type = "text";
+                displayNameInput.placeholder = "Enter a custom display name...";
+
+                // NOW you can use displayNameInput
+                const override = loadDisplayNameOverride();
                 if (override) {
                     displayNameInput.value = override;
                 } else {
@@ -104,11 +111,6 @@ export function openSettingsModal() {
                     });
                 }
 
-                const displayNameLabel = document.createElement("label");
-                displayNameLabel.textContent = "Change Display Name:";
-                const displayNameInput = document.createElement("input");
-                displayNameInput.type = "text";
-                displayNameInput.placeholder = "Enter a custom display name...";
                 const displayNameButton = button("Save", () => {
                     const newName = displayNameInput.value.trim();
                     saveDisplayNameOverride(newName);
