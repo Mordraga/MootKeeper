@@ -38,9 +38,10 @@ function buildAuthCard() {
 
     const loginBtnGoogle = button("Login with Google", loginWithGoogle, "btn-secondary");
     const loginBtnTwitch = button("Login with Twitch", loginWithTwitch, "btn-primary");
-    loginBtn.style.width = "100%";
+    loginBtnGoogle.style.width = "100%";
+    loginBtnTwitch.style.width = "100%";
 
-    card.append(prompt, loginBtn);
+    card.append(prompt, loginBtnTwitch, loginBtnGoogle);
   }
 
   return card;
