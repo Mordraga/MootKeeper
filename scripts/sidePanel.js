@@ -61,8 +61,10 @@ function buildAuthCard() {
 
       const subtitle = document.createElement("p");
       subtitle.className = "subtitle";
-      const provider = localStorage.getItem("auth_provider") || "unknown";
-      subtitle.textContent = `Signed in with ${provider === "google" ? "Google" : "Twitch"}`;
+      const provider = localStorage.getItem("auth_provider");
+      const providerLabel = provider === "google" ? "Google" : provider === "twitch" ? "Twitch" : "Unknown";
+      subtitle.textContent = `Signed in with ${providerLabel}`;
+
 
       const logoutBtn = button("Logout", logout, "btn-sm");
 

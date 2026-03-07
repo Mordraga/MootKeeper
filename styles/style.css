@@ -71,6 +71,13 @@ h3 {
   color: var(--text-muted);
 }
 
+.subtitle {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: -0.3rem;
+  margin-bottom: 0.5rem;
+}
+
 .inner-card {
   background: var(--surface);
   border: 1px solid var(--border);
