@@ -3,7 +3,8 @@
 import { isLoggedIn, loginWithTwitch, loginWithGoogle, logout, loadUserInfo } from "./auth.js";
 import { clear, button, createSidePanel } from "./ui.js";
 import { openCategoryManager } from "./categories.js";
-import { openTimezoneModal } from "./timezoneModal.js";
+import { openAboutModal } from "./aboutModal.js";
+import { openSettingsModal } from "./settingsModal.js";
 
 function createTwitchLoginButton() {
   const btn = document.createElement("button");
@@ -93,12 +94,17 @@ export function initSidePanel(onCategoryUpdate) {
       onClick: () => openCategoryManager(onCategoryUpdate)
     },
     {
-      label: "My Timezone",
-      icon: "🕐",
-      onClick: () => openTimezoneModal()
+      label: "About The Project",
+      icon: "✉️",
+      onClick: () => openAboutModal()
+    },
+    {
+      label: "Settings",
+      icon: "⚙️",
+      onClick: () => openSettingsModal()
     }
   ]);
-  
+
   const authCard = buildAuthCard();
   if (isLoggedIn()) {
     inner.appendChild(authCard);

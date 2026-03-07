@@ -8,6 +8,17 @@ export function clear(el) {
   el.innerHTML = "";
 }
 
+export function separator() {
+  const separator = document.createElement("hr");
+  separator.className = "separator";
+  return separator;
+}
+
+export function addSeperator(container) {
+  separator();
+  body.appendChild(separator());
+}
+
 export function button(label, onClick, className = "") {
   const btn = document.createElement("button");
   btn.type = "button";
@@ -98,6 +109,22 @@ export function createModal(title, contentFn) {
 
   document.body.appendChild(overlay);
   return overlay;
+}
+
+// Modal Updater
+export function updateModal(settings = {}, elements = {}) {
+    if (settings.timeFormat !== undefined && elements.timeFormatChosen && elements.sampleTime) {
+        elements.timeFormatChosen.textContent = settings.timeFormat === "24" ? "24-hour" : "12-hour";
+        elements.sampleTime.textContent = ` (e.g. ${settings.timeFormat === "24" ? "14:27" : "2:27 PM"})`;
+    }
+
+    if (settings.timezone !== undefined && elements.timezoneLabel) {
+        // stub
+    }
+
+    if (settings.displayName !== undefined && elements.displayNamePreview) {
+        // stub
+    }
 }
 
 // Side panel builder

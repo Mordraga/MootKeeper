@@ -6,9 +6,11 @@ import { initFilterBar, renderAllContacts, updateFilterRelationships } from "./c
 import { initContactForm, rebuildFormDropdowns } from "./contactForm.js";
 import { initOnboarding } from "./onboarding.js";
 import { loadCategories } from "./categoryStore.js";
+import { loadAllPreferences } from "./preferences.js";
 
 async function init() {
   handleCallback();
+  await loadAllPreferences();
 
   initSidePanel(() => {
     rebuildFormDropdowns();
@@ -18,7 +20,7 @@ async function init() {
 
   initFilterBar();
   initContactForm(renderAllContacts);
-  await initOnboarding();
+  initOnboarding();
   renderAllContacts();
 }
 
