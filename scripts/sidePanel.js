@@ -85,6 +85,7 @@ function buildAuthCard() {
 }
 
 export function initSidePanel(onCategoryUpdate) {
+
   const { panel, inner } = createSidePanel([
     {
       label: "Categories",
@@ -97,7 +98,13 @@ export function initSidePanel(onCategoryUpdate) {
       onClick: () => openTimezoneModal()
     }
   ]);
+  
+  const authCard = buildAuthCard();
+  if (isLoggedIn()) {
+    inner.appendChild(authCard);
+  } else {
+    inner.insertBefore(authCard, inner.firstChild);
+  }
 
-  inner.appendChild(buildAuthCard());
   document.body.insertBefore(panel, document.body.firstChild);
 }

@@ -1,0 +1,56 @@
+# MootsKeeper
+
+MootsKeeper is a lightweight relationship manager for streamers and VTubers to track moots, collab context, and social links in one place.
+
+## Live Project
+- App: https://mootskeeper.com
+
+## Who It’s For
+- Streamers and VTubers managing lots of mutuals/collab contacts
+- Creators who want quick memory support for names, vibes, links, and availability
+
+## Current Features
+- Twitch and Google sign-in
+- Contact CRUD (create, edit, delete, organize)
+- Relationship labels and keyword/tag workflows
+- Social link fields per contact
+- User preferences persistence (onboarding + account-side settings groundwork)
+- Side panel tools for fast navigation
+
+## Project Status
+Active development.  
+Core functionality is usable now; quality-of-life and account features are still being expanded.
+
+## Roadmap
+- Native MootsKeeper account registration (username/password)
+- Public discoverability toggle + user lookup suggestions
+- Expanded settings modal
+- More workflow tools in side panel (reminders, quick notes, etc.)
+
+## Tech Stack
+- Frontend: HTML, CSS, Vanilla JavaScript
+- Backend: FastAPI (Python)
+- Database: PostgreSQL
+- Hosting: Railway + static frontend hosting
+
+## Local Development (WIP docs)
+Local setup instructions will be expanded as the project stabilizes.
+
+## Privacy Note
+MootsKeeper stores only data required to provide account and contact-management features.  
+Please avoid storing sensitive personal information in notes/tags.
+
+## Trademark Notice
+MootsKeeper is an independent project and is not affiliated with or endorsed by Twitch or Google.
+
+## Contributing
+Issues and feedback are welcome.  
+If you found this project from the app’s About modal, thanks for checking it out!
+
+## Creator
+Built by Mordraga0
+- Twitter/X: https://x.com/Mordraga0
+
+
+## License
+MIT (see `LICENSE`)

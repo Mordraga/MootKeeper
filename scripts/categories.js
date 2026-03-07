@@ -73,23 +73,33 @@ function renderCategoryModal(body, onUpdate) {
   tagTitle.textContent = "Tags";
 
   const tagTags = document.createElement("div");
-  tagTags.className = "cat-tags";
+  tagTags.className = "cat-tags cat-tags-grouped";
 
   function refreshTags() {
     clear(tagTags);
     Object.entries(loadCategories().tags).forEach(([group, tags]) => {
       if (!Array.isArray(tags) || !tags.length) return;
+
+      const groupSection = document.createElement("div");
+      groupSection.className = "tag-group cat-tag-group";
+
       const groupLabel = document.createElement("span");
-      groupLabel.className = "cat-group-label";
+      groupLabel.className = "tag-group-label";
       groupLabel.textContent = group;
-      tagTags.appendChild(groupLabel);
+
+      const groupContent = document.createElement("div");
+      groupContent.className = "tag-group-content cat-group-content";
+
       tags.forEach(t => {
-        tagTags.appendChild(tag(t, (name) => {
+        groupContent.appendChild(tag(t, (name) => {
           removeTag(name);
           refreshTags();
           if (onUpdate) onUpdate();
         }));
       });
+
+      groupSection.append(groupLabel, groupContent);
+      tagTags.appendChild(groupSection);
     });
   }
   refreshTags();

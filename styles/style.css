@@ -104,6 +104,12 @@ h3 {
   margin-top: 2rem;
 }
 
+.seperator {
+  height: 1px;
+  background: var(--border);
+  margin: 1rem 0;
+}
+
 /* ========== SIDE PANEL ========== */
 
 .side-panel {
@@ -673,6 +679,35 @@ button:hover {
   margin-bottom: 0.5rem;
 }
 
+.cat-tags > .cat-group-label {
+  flex: 0 0 100%;
+  margin-top: 0.25rem;
+  margin-bottom: -0.05rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.cat-tags > .cat-group-label:first-child {
+  margin-top: 0;
+}
+
+.cat-tags-grouped {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  gap: 0.65rem;
+}
+
+.cat-tags-grouped .cat-tag-group {
+  width: 100%;
+}
+
+.cat-tags-grouped .tag-group-label {
+  display: block;
+}
+
 .cat-add-row {
   display: grid;
   grid-template-columns: 1fr auto;
@@ -943,6 +978,16 @@ button:hover {
   font-size: 0.8rem;
   color: var(--text-muted);
   margin: 0;
+}
+
+/* ========== MISC ========== */
+
+.github-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: var(--text-muted);
+  font-size: 0.8rem;
 }
 
 /* ========== DESKTOP ADJUSTMENTS ========== */
