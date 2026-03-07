@@ -44,10 +44,6 @@ export function getUserTimezone() {
     return detected;
 }
 
-export function saveUserTimezone(timezone) {
-    localStorage.setItem("userTimezone", timezone);
-}
-
 export function loadDisplayNameOverride() {
     return localStorage.getItem("displayNameOverride") || null;
 }

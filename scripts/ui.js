@@ -14,11 +14,6 @@ export function separator() {
   return separator;
 }
 
-export function addSeperator(container) {
-  separator();
-  body.appendChild(separator());
-}
-
 export function button(label, onClick, className = "") {
   const btn = document.createElement("button");
   btn.type = "button";

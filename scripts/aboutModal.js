@@ -18,9 +18,6 @@ export function openAboutModal() {
         githubLink.target = "_blank";
         githubLink.textContent = "Report issues or contribute on GitHub";
 
-        const separator = document.createElement("hr");
-        separator.className = "separator";
-
         const developerBlurb = document.createElement("p");
         developerBlurb.textContent = "Developed by Mordraga0, software dev and streamer. If you have any questions, suggestions, or just want to say hi, feel free to reach out!";
         const twitterLink = document.createElement("a");

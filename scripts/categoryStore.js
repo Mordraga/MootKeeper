@@ -2,7 +2,7 @@
 
 const CATEGORIES_KEY = "streamCategories";
 
-const DEFAULT_CATEGORIES = {
+export const DEFAULT_CATEGORIES = {
   relationships: ["Friend", "Artist", "Viewer", "Mod", "Moot", "Oshi", "Senpai", "Kohai", "Other"],
   tags: {
     Interests: ["Gaming", "IRL", "Art", "Music", "Tech"],

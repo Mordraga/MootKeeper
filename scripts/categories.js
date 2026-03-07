@@ -6,7 +6,8 @@ import {
   addRelationship,
   removeRelationship,
   addTag,
-  removeTag
+  removeTag,
+  DEFAULT_CATEGORIES
 } from "./categoryStore.js";
 
 import { clear, button, createModal, tag } from "./ui.js";
@@ -46,6 +47,7 @@ function renderCategoryModal(body, onUpdate) {
   const relInputWrap = document.createElement("div");
   relInputWrap.className = "cat-add-row";
 
+
   const relInput = document.createElement("input");
   relInput.type = "text";
   relInput.placeholder = "Add relationship type...";
@@ -73,33 +75,24 @@ function renderCategoryModal(body, onUpdate) {
   tagTitle.textContent = "Tags";
 
   const tagTags = document.createElement("div");
-  tagTags.className = "cat-tags cat-tags-grouped";
+  tagTags.className = "cat-tags";
 
   function refreshTags() {
     clear(tagTags);
     Object.entries(loadCategories().tags).forEach(([group, tags]) => {
       if (!Array.isArray(tags) || !tags.length) return;
-
-      const groupSection = document.createElement("div");
-      groupSection.className = "tag-group cat-tag-group";
-
-      const groupLabel = document.createElement("span");
-      groupLabel.className = "tag-group-label";
+      const groupLabel = document.createElement("div");
+      groupLabel.className = "cat-group-label";
       groupLabel.textContent = group;
-
-      const groupContent = document.createElement("div");
-      groupContent.className = "tag-group-content cat-group-content";
-
+      tagTags.appendChild(groupLabel);
+      
       tags.forEach(t => {
-        groupContent.appendChild(tag(t, (name) => {
+        tagTags.appendChild(tag(t, (name) => {
           removeTag(name);
           refreshTags();
           if (onUpdate) onUpdate();
         }));
       });
-
-      groupSection.append(groupLabel, groupContent);
-      tagTags.appendChild(groupSection);
     });
   }
   refreshTags();

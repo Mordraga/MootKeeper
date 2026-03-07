@@ -14,6 +14,8 @@ import {
 
 import { button, separator, createModal, updateModal } from './ui.js';
 
+import { isLoggedIn, loadUserInfo } from "./auth.js";
+
 import { renderAllContacts } from "./contactList.js";
 
 export function openSettingsModal() {
@@ -48,8 +50,7 @@ export function openSettingsModal() {
             updateTimeFormatUI();
         });
 
-        Seperator();
-        appendChild(seperator());
+        body.appendChild(separator());
         
         //Timezone Detection
         const current = loadUserTimezone();
@@ -86,6 +87,32 @@ export function openSettingsModal() {
         tzContainer.appendChild(saveBtn);
         body.appendChild(tzContainer);
 
+        body.appendChild(separator());
 
+        // Display Name Override
+
+        if (isLoggedIn()){
+            const override = loadDisplayNameOverride();
+                if (override) {
+                    displayNameInput.value = override;
+                } else {
+                    loadUserInfo().then(data => {
+                        displayNameInput.value = data.display_name || "";
+                    });
+                }
+
+                const displayNameLabel = document.createElement("label");
+                displayNameLabel.textContent = "Change Display Name:";
+                const displayNameInput = document.createElement("input");
+                displayNameInput.type = "text";
+                displayNameInput.placeholder = "Enter a custom display name...";
+
+                const displayNameContainer = document.createElement("div");
+                displayNameContainer.className = "setting-item";
+                displayNameContainer.appendChild(displayNameLabel);
+                displayNameContainer.appendChild(displayNameInput);
+                body.appendChild(displayNameContainer);
+                updateModal({ displayNameOverride: override }, { displayNameInput });
+        }
     });
 }
