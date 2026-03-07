@@ -931,7 +931,7 @@ button:hover {
 }
 
 .auth-card .subtitle {
-  font-size: 0.78rem;
+  font-size: 0.70rem;
   color: var(--text-muted);
   line-height: 1.25;
   letter-spacing: 0.01em;
