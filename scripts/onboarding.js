@@ -10,7 +10,9 @@ export function initOnboarding() {
 
     if (!onboardingCard || !dismissBtn) return;
 
-    if (loadOnboardingDismissedLocal()) onboardingCard.classList.add("hidden");
+        if (!loadOnboardingDismissedLocal()) {
+        onboardingCard.classList.remove("hidden");
+    }
 
     dismissBtn.addEventListener("click", () => {
         onboardingCard.classList.add("hidden");
