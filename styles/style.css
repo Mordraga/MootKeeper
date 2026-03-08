@@ -71,6 +71,10 @@ h3 {
   color: var(--text-muted);
 }
 
+h1, h2, h3 {
+  font-family: 'Poppins', sans-serif;
+}
+
 .subtitle {
   font-size: 0.85rem;
   color: var(--text-muted);
