@@ -24,7 +24,7 @@ export async function loadAllPreferences() {
         const data = await res.json();
         console.log("[PREFS] GET response →", data);
 
-        if (data.onboardingDismissed !== undefined) saveOnboardingDismissedLocal(data.onboardingDismissed);
+        if (data.onboardingDismissed === true) saveOnboardingDismissedLocal(true);
         if (data.timeFormat) saveUserTimeFormatPref(data.timeFormat);
         if (data.timezone) saveUserTimezone(data.timezone);
         if (data.displayNameOverride) saveDisplayNameOverride(data.displayNameOverride);
