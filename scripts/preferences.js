@@ -1,3 +1,5 @@
+import { API_BASE, isLoggedIn, authHeaders } from "./auth.js";
+
 export function loadOnboardingDismissedLocal() {
     const val = localStorage.getItem(ONBOARDING_DISMISSED_KEY) === "true";
     console.log("[ONBOARDING] loadLocal →", val);
