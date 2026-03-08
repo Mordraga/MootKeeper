@@ -44,6 +44,9 @@ export async function savePreference(key, value) {
     } catch (err) {
         console.warn(`savePreference(${key}) failed:`, err);
     }
+    const res = await fetch(...);
+    console.log("[PREFS] PATCH status →", res.status);
+    if (!res.ok) throw new Error(`Failed to save preference: ${key}`);
 }
 
 
