@@ -22,6 +22,7 @@ export async function loadAllPreferences() {
         });
         if (!res.ok) throw new Error("Failed to fetch preferences");
         const data = await res.json();
+        console.log("[PREFS] GET response →", data);
 
         if (data.onboardingDismissed !== undefined) saveOnboardingDismissedLocal(data.onboardingDismissed);
         if (data.timeFormat) saveUserTimeFormatPref(data.timeFormat);
