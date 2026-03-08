@@ -117,13 +117,6 @@ export function openSettingsModal() {
                     renderAllContacts();
                 }, "btn-primary");
 
-                displayNameInput.addEventListener("change", () => {
-                    const newName = displayNameInput.value.trim();
-                    saveDisplayNameOverride(newName);
-                    savePreference("displayNameOverride", newName);
-                    renderAllContacts();
-                });
-
                 const displayNameContainer = document.createElement("div");
                 displayNameContainer.className = "setting-item";
                 displayNameContainer.appendChild(displayNameLabel);
