@@ -1,24 +1,29 @@
+// preferences.js
+
 import { API_BASE, isLoggedIn, authHeaders } from "./auth.js";
+import { saveUserTimeFormatPref, saveDisplayNameOverride } from "./settings.js";
+import { saveUserTimezone } from "./timezone.js";
+
+const ONBOARDING_DISMISSED_KEY = "onboardingDismissed";
 
 export function loadOnboardingDismissedLocal() {
-    const val = localStorage.getItem(ONBOARDING_DISMISSED_KEY) === "true";
-    console.log("[ONBOARDING] loadLocal →", val);
-    return val;
+    return localStorage.getItem(ONBOARDING_DISMISSED_KEY) === "true";
 }
 
 export function saveOnboardingDismissedLocal(isDismissed) {
-    console.log("[ONBOARDING] saveLocal →", isDismissed, new Error().stack);
     localStorage.setItem(ONBOARDING_DISMISSED_KEY, String(Boolean(isDismissed)));
 }
 
 export async function loadAllPreferences() {
     if (!isLoggedIn()) return;
     try {
-        const res = await fetch(`${API_BASE}/user/preferences`, { headers: authHeaders() });
+        const res = await fetch(`${API_BASE}/user/preferences`, {
+            headers: authHeaders()
+        });
         if (!res.ok) throw new Error("Failed to fetch preferences");
         const data = await res.json();
-        console.log("[PREFS] loadAllPreferences response →", data);
-        if (data.onboardingDismissed === true) saveOnboardingDismissedLocal(true);
+
+        if (data.onboardingDismissed !== undefined) saveOnboardingDismissedLocal(data.onboardingDismissed);
         if (data.timeFormat) saveUserTimeFormatPref(data.timeFormat);
         if (data.timezone) saveUserTimezone(data.timezone);
         if (data.displayNameOverride) saveDisplayNameOverride(data.displayNameOverride);
@@ -28,7 +33,6 @@ export async function loadAllPreferences() {
 }
 
 export async function savePreference(key, value) {
-    console.log("[PREFS] savePreference →", key, value, new Error().stack);
     if (!isLoggedIn()) return;
     try {
         const res = await fetch(`${API_BASE}/user/preferences`, {
@@ -37,8 +41,89 @@ export async function savePreference(key, value) {
             body: JSON.stringify({ [key]: value })
         });
         if (!res.ok) throw new Error(`Failed to save preference: ${key}`);
-        console.log("[PREFS] savePreference SUCCESS →", key);
     } catch (err) {
         console.warn(`savePreference(${key}) failed:`, err);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
