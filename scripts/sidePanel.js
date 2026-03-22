@@ -1,6 +1,6 @@
 // sidePanel.js
 
-import { isLoggedIn, loginWithTwitch, loginWithGoogle, logout, loadUserInfo } from "./auth.js";
+import { isLoggedIn, loginWithTwitch, loginWithGoogle, loginWithInkScout, logout, loadUserInfo } from "./auth.js";
 import { clear, button, createSidePanel } from "./ui.js";
 import { openCategoryManager } from "./categories.js";
 import { openAboutModal } from "./aboutModal.js";
@@ -39,6 +39,16 @@ function createGoogleLoginButton() {
   return btn;
 }
 
+function createInkScoutLoginButton() {
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "auth-brand-btn btn-inkscout";
+  btn.setAttribute("aria-label", "Sign in with InkScout");
+  btn.textContent = "Sign in with InkScout";
+  btn.addEventListener("click", loginWithInkScout);
+  return btn;
+}
+
 function buildAuthCard() {
   const card = document.createElement("div");
   card.className = "auth-card";
@@ -65,7 +75,11 @@ function buildAuthCard() {
       const subtitle = document.createElement("p");
       subtitle.className = "subtitle";
       const provider = localStorage.getItem("auth_provider");
-      const providerLabel = provider === "google" ? "Google" : provider === "twitch" ? "Twitch" : "Unknown";
+      const providerLabel =
+        provider === "google" ? "Google"
+        : provider === "twitch" ? "Twitch"
+        : provider === "inkscout" ? "InkScout"
+        : "Unknown";
       subtitle.textContent = `Signed in with ${providerLabel}`;
 
 
@@ -80,8 +94,9 @@ function buildAuthCard() {
 
     const loginBtnTwitch = createTwitchLoginButton();
     const loginBtnGoogle = createGoogleLoginButton();
+    const loginBtnInkScout = createInkScoutLoginButton();
 
-    card.append(prompt, loginBtnTwitch, loginBtnGoogle);
+    card.append(prompt, loginBtnInkScout, loginBtnTwitch, loginBtnGoogle);
   }
 
   return card;

@@ -438,6 +438,21 @@ button:hover {
   background: transparent;
 }
 
+.btn-inkscout {
+  box-sizing: border-box;
+  padding: 0 12px;
+  background: linear-gradient(135deg, #0f7aa5 0%, #0a4c75 100%);
+  border: 1px solid #0c5a83;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.btn-inkscout:hover {
+  background: linear-gradient(135deg, #0e6e95 0%, #093f63 100%);
+  border-color: #0a4a6f;
+}
+
 .auth-brand-btn:focus-visible {
   outline: 2px solid #8ab4f8;
   outline-offset: 2px;

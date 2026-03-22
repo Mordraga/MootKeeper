@@ -1,6 +1,7 @@
 // auth.js
 
 export const API_BASE = "https://streamernetworkfastapi-production.up.railway.app";
+export const INKSCOUT_APP_URL = "https://inkscout.app";
 const TOKEN_KEY = "auth_token";
 
 export function getToken() {
@@ -35,6 +36,10 @@ export function loginWithGoogle() {
   window.location.href = `${API_BASE}/auth/google/login`;
 }
 
+export function loginWithInkScout() {
+  window.open(`${INKSCOUT_APP_URL}/app`, "_blank", "noopener,noreferrer");
+}
+
 export function logout() {
   clearToken();
   localStorage.removeItem("auth_provider");
@@ -50,10 +55,18 @@ export function authHeaders() {
 }
 
 export function handleCallback() {
-  const hash = window.location.hash;
-  if (hash.startsWith("#token=")) {
-    const token = hash.slice(7);
+  const hash = window.location.hash.startsWith("#")
+    ? window.location.hash.slice(1)
+    : "";
+  if (!hash) return false;
+
+  const params = new URLSearchParams(hash);
+  const token = params.get("token");
+  const provider = params.get("provider");
+
+  if (token) {
     setToken(token);
+    localStorage.setItem("auth_provider", provider || "inkscout");
     window.history.replaceState(null, "", window.location.pathname);
     return true;
   }
