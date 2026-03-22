@@ -85,7 +85,10 @@ function buildAuthCard() {
 
       const logoutBtn = button("Logout", logout, "btn-sm");
 
-      card.append(img, name, subtitle, logoutBtn);
+      card.appendChild(img);
+      card.appendChild(name);
+      card.appendChild(subtitle);
+      card.appendChild(logoutBtn);
     }).catch(() => logout());
   } else {
     const prompt = document.createElement("p");
@@ -96,7 +99,10 @@ function buildAuthCard() {
     const loginBtnGoogle = createGoogleLoginButton();
     const loginBtnInkScout = createInkScoutLoginButton();
 
-    card.append(prompt, loginBtnInkScout, loginBtnTwitch, loginBtnGoogle);
+    card.appendChild(prompt);
+    card.appendChild(loginBtnInkScout);
+    card.appendChild(loginBtnTwitch);
+    card.appendChild(loginBtnGoogle);
   }
 
   return card;

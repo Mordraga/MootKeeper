@@ -410,15 +410,15 @@ button:hover {
 
 .auth-brand-btn {
   all: unset;
-  width: 179px;
-  height: 40px;
-  max-width: 100%;
+  width: 100%;
+  max-width: 179px;
+  min-height: 40px;
   margin: 0 auto;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  line-height: 0;
+  line-height: 1;
   border-radius: 999px;
 }
 
@@ -440,12 +440,15 @@ button:hover {
 
 .btn-inkscout {
   box-sizing: border-box;
-  padding: 0 12px;
+  padding: 0.35rem 0.65rem;
   background: linear-gradient(135deg, #0f7aa5 0%, #0a4c75 100%);
   border: 1px solid #0c5a83;
   color: #ffffff;
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: clamp(0.74rem, 2.4vw, 0.82rem);
+  line-height: 1.2;
+  white-space: normal;
+  text-align: center;
 }
 
 .btn-inkscout:hover {
@@ -470,8 +473,9 @@ button:hover {
 }
 
 .google-signin-img {
-  width: 179px;
-  height: 40px;
+  width: 100%;
+  max-width: 179px;
+  height: auto;
 }
 
 .btn-sm {

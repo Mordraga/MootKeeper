@@ -1,11 +1,12 @@
 // sw.js - MootsKeeper Service Worker
 
-const CACHE_NAME = "mootskeeper-v1";
+const CACHE_NAME = "mootskeeper-v2";
 
 // Static assets to cache on install
 const STATIC_ASSETS = [
   "/",
   "/index.html",
+  "/fallback.html",
   "/styles/style.css",
   "/scripts/app.js",
   "/scripts/auth.js",
@@ -58,6 +59,8 @@ self.addEventListener("activate", (event) => {
 
 // ========== FETCH ==========
 self.addEventListener("fetch", (event) => {
+  if (event.request.method !== "GET") return;
+
   const url = new URL(event.request.url);
 
   // API calls (Railway backend) — network first, fall through on fail
@@ -73,6 +76,36 @@ self.addEventListener("fetch", (event) => {
           }
         );
       })
+    );
+    return;
+  }
+
+  // App shell files — network first so clients don't get stuck on stale JS/CSS.
+  const isSameOrigin = url.origin === self.location.origin;
+  const destination = event.request.destination; // "document" | "script" | "style" | etc.
+  const shouldPreferNetwork =
+    isSameOrigin &&
+    (destination === "document" || destination === "script" || destination === "style");
+
+  if (shouldPreferNetwork) {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          if (response && response.status === 200 && response.type === "basic") {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+          }
+          return response;
+        })
+        .catch(async () => {
+          const cached = await caches.match(event.request);
+          if (cached) return cached;
+          if (destination === "document") {
+            const fallback = await caches.match("/fallback.html");
+            if (fallback) return fallback;
+          }
+          return new Response("Offline", { status: 503, statusText: "Offline" });
+        })
     );
     return;
   }
